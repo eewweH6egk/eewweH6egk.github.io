@@ -2,67 +2,104 @@
 <html>
 <head>
     <title>焕儿瓜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <!-- 引入 ckplayer 的 CDN -->
+    <script src="./ck.js"></script>
+    <meta charset="UTF-8">
+
 </head>
 <body>
-    <video class="videos" id="videoPlayer" controls></video>
-    <div>
-      <h2>免费吃瓜网站:</h2>
-      <h2>www.wzcm8.com</h2>
-      <button id="copyButton" style="background-color: rgb(122, 122, 236); color: white;">点我复制网站浏览器打开</button>
+
+    <div id="video" style="width: 100%; height: 600px;max-width: 600px;"></div>
+
+    <div class="centered-container">
+        <div class="content">
+            <h2>免费吃瓜网站:</h2>
+            <h2>www.wzcm8.com</h2>
+            <button id="copyButton">点我复制网站浏览器打开</button>
+        </div>
     </div>
+<script type="text/javascript">
+    var videoObject = {
+        container: '#video',//“#”代表容器的ID，“.”或“”代表容器的class
+        variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+        autoplay:true,
+        html5m3u8:true,
+        video:'https://nos.netease.com/yanxuan/7b3b8e408f0805fb5fd0d45592165b65.m3u8',//视频地址
+        hlsjsConfig: {   // hlsjs和CDNBye的配置参数
+            debug: false,
+            // Other hlsjsConfig options provided by hls.js
+            p2pConfig: {
+                logLevel: true,
+                live: false, // 如果是直播设为true
+                // Other p2pConfig options provided by CDNBye
+                // https://github.com/cdnbye/hlsjs-p2p-engine/blob/master/docs/%E4%B8%AD%E6%96%87/API.md
+            }
+        }
+    };
+    var player = new ckplayer(videoObject);
+</script>
     <script>
-        // 获取video元素
-        var video = document.getElementById("videoPlayer");
+        // 获取按钮元素
+        var copyButton = document.getElementById("copyButton");
 
-        // 设置视频源为M3U8格式的视频文件
-        video.src = "https://nos.netease.com/yanxuan/7b3b8e408f0805fb5fd0d45592165b65.m3u8";
+        // 添加点击事件监听器
+        copyButton.addEventListener("click", function() {
+            // 要复制的内容
+            var contentToCopy = "http://bb.old6tv.top";
 
-        // 播放视频
-        video.play();
+            // 创建临时文本输入框
+            var tempInput = document.createElement("input");
+            tempInput.setAttribute("value", contentToCopy);
+            document.body.appendChild(tempInput);
+
+            // 选择文本
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // 兼容移动设备
+
+            // 复制文本到剪贴板
+            document.execCommand("copy");
+
+            // 移除临时文本输入框
+            document.body.removeChild(tempInput);
+
+            // 修改按钮文本
+            copyButton.textContent = "已复制";
+
+            // 2秒后恢复按钮文本
+            setTimeout(function() {
+                copyButton.textContent = "复制内容";
+            }, 2000);
+        });
     </script>
 </body>
 <style>
-  .videos{
-    width: 100%;
-    height: 80%;
-  }
-  #copyButton{
-    width: 200px;
-    height: 50px;
-    
-  }
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .centered-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* height: 100vh; */
+    }
+
+    .content {
+        text-align: center;
+    }
+
+    .ckplayer-container {
+        width: 100%;
+        height: 80vh;
+    }
+
+    #copyButton {
+        background-color: rgb(122, 122, 236);
+        color: white;
+        width: 200px;
+        height: 50px;
+    }
 </style>
-<script>
-  // 获取按钮元素
-  var copyButton = document.getElementById("copyButton");
-
-  // 添加点击事件监听器
-  copyButton.addEventListener("click", function() {
-    // 要复制的内容
-    var contentToCopy = "http://bb.old6tv.top";
-
-    // 创建临时文本输入框
-    var tempInput = document.createElement("input");
-    tempInput.setAttribute("value", contentToCopy);
-    document.body.appendChild(tempInput);
-
-    // 选择文本
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // 兼容移动设备
-
-    // 复制文本到剪贴板
-    document.execCommand("copy");
-
-    // 移除临时文本输入框
-    document.body.removeChild(tempInput);
-
-    // 修改按钮文本
-    copyButton.textContent = "已复制";
-
-    // 2秒后恢复按钮文本
-    setTimeout(function() {
-      copyButton.textContent = "复制内容";
-    }, 2000);
-  });
-</script>
 </html>
