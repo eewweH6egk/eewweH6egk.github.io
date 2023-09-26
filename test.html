@@ -7,9 +7,9 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<div id="targetElement"></div>
+<div id="targetElement">加载中</div>
 
-<!-- <video id="video" controls></video> -->
+<!--<video id="video" controls></video>-->
 <script>
     function w() {
         var e = "ABCD*EFGHIJKLMNOPQRSTUVWX#YZabcdefghijklmnopqrstuvwxyz1234567890"
@@ -95,7 +95,7 @@ init();
     //初始化
     function init() {
         var randomNumber = Math.floor(Math.random() * 99999) + 1;
-        axios.get("https://hj2e3.com/api/topic/" + randomNumber)
+        axios.get("https://hjedd.com/api/topic/" + randomNumber)
             .then(function (response) {
                 if (response.data.data != null) {
                     let restr = decodeURIComponent(escape(atob(atob(atob(response.data.data)))));
