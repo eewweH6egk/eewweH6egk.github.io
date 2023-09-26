@@ -7,6 +7,8 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
+<h1 id="title">标题</h1>
+
 <div id="targetElement">加载中</div>
 
 <!--<video id="video" controls></video>-->
@@ -91,11 +93,12 @@
     //         video.play();
     //     });
     // }
-init();
+    init();
+
     //初始化
     function init() {
-        var randomNumber = Math.floor(Math.random() * 99999) + 1;
-        axios.get("https://hjedd.com/api/topic/" + randomNumber)
+        // var randomNumber = Math.floor(Math.random() * 99999) + 1;
+        axios.get("https://hjedd.com/api/topic/" + getRandomNumber())
             .then(function (response) {
                 if (response.data.data != null) {
                     let restr = decodeURIComponent(escape(atob(atob(atob(response.data.data)))));
@@ -107,10 +110,17 @@ init();
             });
     }
 
+    function getRandomNumber() {
+        const min = 500000;
+        const max = 900000;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
     function imgfunc(json) {
         var targetElement = document.getElementById("targetElement");
+        var title = document.getElementById("title");
         targetElement.innerHTML = json.content;
+        title.innerHTML = json.title;
         //获取图片
         let images = document.querySelectorAll('img');
         images.forEach((img, index) => {
