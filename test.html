@@ -1,89 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>焕儿瓜</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <!-- 引入 ckplayer 的 CDN -->
-    <script src="./ck.js"></script>
+    <meta charset="UTF-8">
+    <title>M3U8视频</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div class="centered-container">
-        <div class="content">
-            <h2>免费吃瓜网站:</h2>
-            <h2>www.wzcm8.com</h2>
-            <button id="copyButton">点我复制网站浏览器打开</button>
-        </div>
-    </div>
-    <div class="ckplayer-container"></div>
-    <script>
-        // 创建 ckplayer 实例
-        var videoPlayer = new ckplayer({
-            container: '.ckplayer-container', // 播放器容器选择器
-            url: 'https://nos.netease.com/yanxuan/7b3b8e408f0805fb5fd0d45592165b65.m3u8', // 视频地址
-            autoplay: true // 自动播放
+<div id="targetElement"></div>
+
+<video id="video" controls></video>
+<script>
+    function w() {
+        var e = "ABCD*EFGHIJKLMNOPQRSTUVWX#YZabcdefghijklmnopqrstuvwxyz1234567890"
+            , t = (this.encode = function (i) {
+                var a, n, o, r, s, c, l = "", u = 0;
+                for (i = t(i); u < i.length;)
+                    o = (a = i.charCodeAt(u++)) >> 2,
+                        r = (3 & a) << 4 | (a = i.charCodeAt(u++)) >> 4,
+                        s = (15 & a) << 2 | (n = i.charCodeAt(u++)) >> 6,
+                        c = 63 & n,
+                        isNaN(a) ? s = c = 64 : isNaN(n) && (c = 64),
+                        l = l + e.charAt(o) + e.charAt(r) + e.charAt(s) + e.charAt(c);
+                return l
+            }
+                ,
+                this.decode = function (t) {
+                    var a, n, o, r, s, c, l = "", u = 0;
+                    for (t = t.replace(/[^A-Za-z0-9\*\#]/g, ""); u < t.length;)
+                        o = e.indexOf(t.charAt(u++)),
+                            a = (15 & (r = e.indexOf(t.charAt(u++)))) << 4 | (s = e.indexOf(t.charAt(u++))) >> 2,
+                            n = (3 & s) << 6 | (c = e.indexOf(t.charAt(u++))),
+                            l += String.fromCharCode(o << 2 | r >> 4),
+                        64 != s && (l += String.fromCharCode(a)),
+                        64 != c && (l += String.fromCharCode(n));
+                    return i(l)
+                }
+                ,
+                function (e) {
+                    e = e.replace(/\r\n/g, "\n");
+                    for (var t = "", i = 0; i < e.length; i++) {
+                        var a = e.charCodeAt(i);
+                        a < 128 ? t += String.fromCharCode(a) : t = 127 < a && a < 2048 ? (t += String.fromCharCode(a >> 6 | 192)) + String.fromCharCode(63 & a | 128) : (t = (t += String.fromCharCode(a >> 12 | 224)) + String.fromCharCode(a >> 6 & 63 | 128)) + String.fromCharCode(63 & a | 128)
+                    }
+                    return t
+                }
+        )
+            , i = function (e) {
+            for (var t, i, a = "", n = 0, o = 0; n < e.length;)
+                (t = e.charCodeAt(n)) < 128 ? (a += String.fromCharCode(t),
+                    n++) : 191 < t && t < 224 ? (o = e.charCodeAt(n + 1),
+                    a += String.fromCharCode((31 & t) << 6 | 63 & o),
+                    n += 2) : (o = e.charCodeAt(n + 1),
+                    i = e.charCodeAt(n + 2),
+                    a += String.fromCharCode((15 & t) << 12 | (63 & o) << 6 | 63 & i),
+                    n += 3);
+            return a
+        }
+    }
+
+    function utf16ToUtf8(str) {
+        const utf8Bytes = [];
+        for (let i = 0; i < str.length; i++) {
+            let charCode = str.charCodeAt(i);
+            if (charCode < 0x80) {
+                utf8Bytes.push(charCode);
+            } else if (charCode < 0x800) {
+                utf8Bytes.push(0xc0 | (charCode >> 6), 0x80 | (charCode & 0x3f));
+            } else if (charCode < 0x10000) {
+                utf8Bytes.push(0xe0 | (charCode >> 12), 0x80 | ((charCode >> 6) & 0x3f), 0x80 | (charCode & 0x3f));
+            } else {
+                utf8Bytes.push(0xf0 | (charCode >> 18), 0x80 | ((charCode >> 12) & 0x3f), 0x80 | ((charCode >> 6) & 0x3f), 0x80 | (charCode & 0x3f));
+            }
+        }
+        return String.fromCharCode.apply(null, utf8Bytes);
+    }
+
+    let videoUrl = 'https://p.hjpfe1.com/hjstore/video/20220816/6df113104a27b7218efc5b220a5b976a/81057_i_preview.m3u8';
+    var video = document.getElementById('video');
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(videoUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play();
         });
-    </script>
-    <script>
-        // 获取按钮元素
-        var copyButton = document.getElementById("copyButton");
-
-        // 添加点击事件监听器
-        copyButton.addEventListener("click", function() {
-            // 要复制的内容
-            var contentToCopy = "http://bb.old6tv.top";
-
-            // 创建临时文本输入框
-            var tempInput = document.createElement("input");
-            tempInput.setAttribute("value", contentToCopy);
-            document.body.appendChild(tempInput);
-
-            // 选择文本
-            tempInput.select();
-            tempInput.setSelectionRange(0, 99999); // 兼容移动设备
-
-            // 复制文本到剪贴板
-            document.execCommand("copy");
-
-            // 移除临时文本输入框
-            document.body.removeChild(tempInput);
-
-            // 修改按钮文本
-            copyButton.textContent = "已复制";
-
-            // 2秒后恢复按钮文本
-            setTimeout(function() {
-                copyButton.textContent = "复制内容";
-            }, 2000);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoUrl;
+        video.addEventListener('loadedmetadata', function () {
+            video.play();
         });
-    </script>
+    }
+init();
+    //初始化
+    function init() {
+        var randomNumber = Math.floor(Math.random() * 99999) + 1;
+        axios.get("https://hjedd.com/api/topic/" + randomNumber)
+            .then(function (response) {
+                if (response.data.data != null) {
+                    let restr = decodeURIComponent(escape(atob(atob(atob(response.data.data)))));
+                    const json = JSON.parse(restr);
+                    imgfunc(json)
+                } else {
+                    init();
+                }
+            });
+    }
+
+
+    function imgfunc(json) {
+        var targetElement = document.getElementById("targetElement");
+        targetElement.innerHTML = json.content;
+        //获取图片
+        let images = document.querySelectorAll('img');
+        images.forEach((img, index) => {
+            axios.get(img.src)
+                .then(function (response) {
+                    img.src = (new w).decode(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+    }
+</script>
 </body>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    .centered-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .content {
-        text-align: center;
-    }
-
-    .ckplayer-container {
-        width: 100%;
-        height: 80vh;
-    }
-
-    #copyButton {
-        background-color: rgb(122, 122, 236);
-        color: white;
-        width: 200px;
-        height: 50px;
-    }
-</style>
 </html>
