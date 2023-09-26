@@ -9,7 +9,7 @@
 <body>
 <div id="targetElement"></div>
 
-<video id="video" controls></video>
+<!-- <video id="video" controls></video> -->
 <script>
     function w() {
         var e = "ABCD*EFGHIJKLMNOPQRSTUVWX#YZabcdefghijklmnopqrstuvwxyz1234567890"
@@ -76,26 +76,26 @@
         return String.fromCharCode.apply(null, utf8Bytes);
     }
 
-    let videoUrl = 'https://p.hjpfe1.com/hjstore/video/20220816/6df113104a27b7218efc5b220a5b976a/81057_i_preview.m3u8';
-    var video = document.getElementById('video');
-    if (Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource(videoUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play();
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = videoUrl;
-        video.addEventListener('loadedmetadata', function () {
-            video.play();
-        });
-    }
+    // let videoUrl = 'https://p.hjpfe1.com/hjstore/video/20220816/6df113104a27b7218efc5b220a5b976a/81057_i_preview.m3u8';
+    // var video = document.getElementById('video');
+    // if (Hls.isSupported()) {
+    //     var hls = new Hls();
+    //     hls.loadSource(videoUrl);
+    //     hls.attachMedia(video);
+    //     hls.on(Hls.Events.MANIFEST_PARSED, function () {
+    //         video.play();
+    //     });
+    // } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    //     video.src = videoUrl;
+    //     video.addEventListener('loadedmetadata', function () {
+    //         video.play();
+    //     });
+    // }
 init();
     //初始化
     function init() {
         var randomNumber = Math.floor(Math.random() * 99999) + 1;
-        axios.get("https://hjedd.com/api/topic/" + randomNumber)
+        axios.get("https://hj2e3.com/api/topic/" + randomNumber)
             .then(function (response) {
                 if (response.data.data != null) {
                     let restr = decodeURIComponent(escape(atob(atob(atob(response.data.data)))));
